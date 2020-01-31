@@ -1,6 +1,8 @@
 # Language Independet Truecaser for Python
 This is an implementation of a trainable Truecaser for Python.
 
+modified for python3, and to take in a file in traintruecaser 
+
 A truecaser converts a sentence where the casing was lost to the most probable casing. Use cases are sentences that are in all-upper case, in all-lower case or in title case.
 
 A model for English is provided, achieving an accuracy of **98.39%** on a small test set of random sentences from Wikipedia.
