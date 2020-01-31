@@ -1,5 +1,5 @@
 from Truecaser import *
-import cPickle
+import pickle
 import nltk
 import string
 
@@ -15,7 +15,7 @@ def evaluateTrueCaser(testSentences, wordCasingLookup, uniDist, backwardBiDist, 
         
         perfectMatch = True
         
-        for idx in xrange(len(tokensCorrect)):
+        for idx in range(len(tokensCorrect)):
             totalTokens += 1
             if tokensCorrect[idx] == tokensTrueCase[idx]:
                 correctTokens += 1
@@ -23,13 +23,13 @@ def evaluateTrueCaser(testSentences, wordCasingLookup, uniDist, backwardBiDist, 
                 perfectMatch = False
         
         if not perfectMatch:
-            print tokensCorrect
-            print tokensTrueCase
+            print(tokensCorrect)
+            print(tokensTrueCase)
         
-            print "-------------------"
+            print("-------------------")
     
 
-    print "Accuracy: %.2f%%" % (correctTokens / float(totalTokens)*100)
+    print ("Accuracy: %.2f%%" % (correctTokens / float(totalTokens)*100))
     
     
 def defaultTruecaserEvaluation(wordCasingLookup, uniDist, backwardBiDist, forwardBiDist, trigramDist):

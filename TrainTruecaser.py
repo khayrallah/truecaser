@@ -5,7 +5,7 @@ import nltk
 import nltk.corpus
 from nltk.corpus import brown
 from nltk.corpus import reuters
-import cPickle
+import pickle
 import string
 import math
 import MySQLdb
@@ -24,7 +24,9 @@ wordCasingLookup = {}
 
 
         
-        
+####MODIFIED to take in a file to train from#########        
+import sys
+infile=sys.argv[1] 
         
 """
 There are three options to train the true caser:
@@ -37,20 +39,19 @@ The more training data, the better the results
          
 
 # :: Option 1: Train it based on NLTK corpus ::
-print "Update from NLTK Corpus"
-NLTKCorpus = brown.sents()+reuters.sents()+nltk.corpus.semcor.sents()+nltk.corpus.conll2000.sents()+nltk.corpus.state_union.sents()
-updateDistributionsFromSentences(NLTKCorpus, wordCasingLookup, uniDist, backwardBiDist, forwardBiDist, trigramDist)
+#print "Update from NLTK Corpus"
+#NLTKCorpus = brown.sents()+reuters.sents()+nltk.corpus.semcor.sents()+nltk.corpus.conll2000.sents()+nltk.corpus.state_union.sents()
+#updateDistributionsFromSentences(NLTKCorpus, wordCasingLookup, uniDist, backwardBiDist, forwardBiDist, trigramDist)
 
 # :: Option 2: Train it based the train.txt file ::
-""" #Uncomment, if you want to train from train.txt
-print "Update from train.txt file"
+#Uncomment, if you want to train from train.txt
+print(f"Update from {infile} file")
 sentences = []
-for line in open('train.txt'):        
+for line in open(infile):        
     sentences.append(line.strip())
     
 tokens = [nltk.word_tokenize(sentence) for sentence in sentences]
 updateDistributionsFromSentences(tokens, wordCasingLookup, uniDist, backwardBiDist, forwardBiDist, trigramDist)
-"""     
    
 # :: Option 3: Train it based ngrams tables from http://www.ngrams.info/download_coca.asp ::    
 """ #Uncomment, if you want to train from train.txt
@@ -58,19 +59,19 @@ print "Update Bigrams / Trigrams"
 updateDistributionsFromNgrams('ngrams/w2.txt', 'ngrams/w3.txt', wordCasingLookup, uniDist, backwardBiDist, forwardBiDist, trigramDist)
 """
 
-f = open('distributions.obj', 'wb')
-cPickle.dump(uniDist, f, protocol=cPickle.HIGHEST_PROTOCOL)
-cPickle.dump(backwardBiDist, f, protocol=cPickle.HIGHEST_PROTOCOL)
-cPickle.dump(forwardBiDist, f, protocol=cPickle.HIGHEST_PROTOCOL)
-cPickle.dump(trigramDist, f, protocol=cPickle.HIGHEST_PROTOCOL)
-cPickle.dump(wordCasingLookup, f, protocol=cPickle.HIGHEST_PROTOCOL)
+f = open(f'{infile}.tc_model.obj', 'wb')
+pickle.dump(uniDist, f, protocol=pickle.HIGHEST_PROTOCOL)
+pickle.dump(backwardBiDist, f, protocol=pickle.HIGHEST_PROTOCOL)
+pickle.dump(forwardBiDist, f, protocol=pickle.HIGHEST_PROTOCOL)
+pickle.dump(trigramDist, f, protocol=pickle.HIGHEST_PROTOCOL)
+pickle.dump(wordCasingLookup, f, protocol=pickle.HIGHEST_PROTOCOL)
 f.close()
 
 
         
 # :: Correct sentences ::
-
-defaultTruecaserEvaluation(wordCasingLookup, uniDist, backwardBiDist, forwardBiDist, trigramDist)
+#skip the eval
+#defaultTruecaserEvaluation(wordCasingLookup, uniDist, backwardBiDist, forwardBiDist, trigramDist)
         
         
 
